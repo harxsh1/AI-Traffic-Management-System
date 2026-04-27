@@ -1,32 +1,76 @@
 from ultralytics import YOLO
 import cv2
 
-# Loading YOLOv8 model for object detection
+# Load YOLO model
 model = YOLO("yolov8n.pt")
 
-# Starting webcam for real-time detection
-cap = cv2.VideoCapture(0)
+# Vehicle classes (COCO dataset)
+vehicle_classes = [2, 3, 5, 7]  # car, bike, bus, truck
 
-while True:
-    ret, frame = cap.read()
-    
-    # If frame is not captured, break the loop
-    if not ret:
-        break
+# Load your videos
+videos = ["video1.mp4", "video2.mp4"]  # low + high congestion
 
-    # Running YOLO detection on current frame
-    results = model(frame)
+for video_path in videos:
+    cap = cv2.VideoCapture(video_path)
 
-    # Drawing bounding boxes on detected objects
-    annotated_frame = results[0].plot()
+    print(f"\nProcessing: {video_path}")
 
-    # Displaying output window
-    cv2.imshow("YOLO Detection", annotated_frame)
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    # Press 'q' to exit the window
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        h, w, _ = frame.shape
 
-# Releasing camera and closing all windows
-cap.release()
+        # Focus only on bottom half (important for accuracy)
+        roi = frame[int(h/2):h, 0:w]
+
+        # Run YOLO on ROI
+        results = model(roi)
+
+        vehicle_count = 0
+
+        for r in results:
+            for box in r.boxes:
+                cls = int(box.cls[0])
+                if cls in vehicle_classes:
+                    vehicle_count += 1
+
+        #  Congestion Logic
+        if vehicle_count < 5:
+            level = "LOW"
+            color = (0, 255, 0)
+        elif vehicle_count < 15:
+            level = "MEDIUM"
+            color = (0, 255, 255)
+        else:
+            level = "HIGH"
+            color = (0, 0, 255)
+
+        # Draw ROI box
+        cv2.rectangle(frame, (0, int(h/2)), (w, h), (255, 0, 0), 2)
+
+        # Display vehicle count
+        cv2.putText(frame, f"Vehicles: {vehicle_count}", (20, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
+        # Display congestion level
+        cv2.putText(frame, f"Traffic: {level}", (20, 100),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, color, 3)
+
+        # Draw detection boxes on ROI
+        annotated_roi = results[0].plot()
+
+        # Replace ROI back into frame
+        frame[int(h/2):h, 0:w] = annotated_roi
+
+        # Show output
+        cv2.imshow(f"Traffic Detection - {video_path}", frame)
+
+        # Press 'q' to exit
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+
 cv2.destroyAllWindows()
