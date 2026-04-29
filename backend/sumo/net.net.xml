@@ -1,0 +1,10 @@
+<net>
+    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,100.00,100.00" origBoundary="0.00,0.00,100.00,100.00"/>
+    
+    <edge id="1" from="n1" to="n2" priority="1" numLanes="1" speed="13.9">
+        <lane id="1_0" index="0" speed="13.9" length="100"/>
+    </edge>
+
+    <junction id="n1" x="0.00" y="0.00" type="priority"/>
+    <junction id="n2" x="100.00" y="0.00" type="priority"/>
+</net>

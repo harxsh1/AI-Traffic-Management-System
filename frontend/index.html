@@ -1,1 +1,55 @@
-<h1>Traffic Dashboard</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Traffic Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>🚦 AI Traffic Management System</header>
+
+<div class="container">
+
+  <!-- LANE 1 -->
+  <div class="lane">
+    <h2>Lane 1</h2>
+    <video autoplay loop muted>
+      <source src="../backend/video1.mp4" type="video/mp4">
+    </video>
+
+    <div class="traffic-light">
+      <div id="red1" class="light red"></div>
+      <div id="yellow1" class="light yellow"></div>
+      <div id="green1" class="light green"></div>
+    </div>
+  </div>
+
+  <!-- LANE 2 -->
+  <div class="lane">
+    <h2>Lane 2</h2>
+    <video autoplay loop muted>
+      <source src="../backend/video2.mp4" type="video/mp4">
+    </video>
+
+    <div class="traffic-light">
+      <div id="red2" class="light red"></div>
+      <div id="yellow2" class="light yellow"></div>
+      <div id="green2" class="light green"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="panel">
+  <h3 id="density">Lane Counts: -</h3>
+  <h3 id="decision">Decision: -</h3>
+  <h3 id="status">Idle</h3>
+
+  <button onclick="startSystem()">Start AI</button>
+  <button onclick="stopSystem()">Stop</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

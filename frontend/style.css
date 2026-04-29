@@ -1,0 +1,48 @@
+body {
+  background: #0f172a;
+  color: white;
+  font-family: Arial;
+}
+
+header {
+  text-align: center;
+  padding: 15px;
+  background: #0072ff;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.lane {
+  width: 40%;
+}
+
+video {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.traffic-light {
+  background: black;
+  width: 60px;
+  margin: auto;
+  padding: 10px;
+}
+
+.light {
+  width: 40px;
+  height: 40px;
+  margin: 5px auto;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.active {
+  opacity: 1;
+}
+
+.red { background: red; }
+.yellow { background: yellow; }
+.green { background: green; }
